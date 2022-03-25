@@ -2,11 +2,13 @@ package com.bintangfajarianto.submission2.ui.detail
 
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bintangfajarianto.submission2.R
@@ -18,6 +20,8 @@ class UserConnectionFragment : Fragment() {
 
     private var _binding: FragmentUserConnectionBinding? = null
     private val binding get() = _binding!!
+    private val detailViewModel by activityViewModels<DetailViewModel>()
+    private var position = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,23 +34,16 @@ class UserConnectionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val index = arguments?.getInt(SECTION_NUMBER, 0)
-        val listUser = arguments?.getParcelableArrayList<User>(LIST_USER)
+        Log.e("FRAGMENT", "CREATED")
 
-        val fragText = binding.fragmentText
-        fragText.text = TAB_FRAGMENT[(index ?: 1) -1]
-
-        val rvUsers = binding.rvUsers
-
-        // Add divider between item in recyclerview
-        val div = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
-        div.setDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.white)))
-        rvUsers.addItemDecoration(div)
-
-        rvUsers.layoutManager = LinearLayoutManager(context)
-        val listUserAdapter = UserAdapter(listUser as ArrayList<User>)
-        rvUsers.adapter = listUserAdapter
-
+        detailViewModel.listFollow.observe(viewLifecycleOwner) {
+            val listUser = ArrayList<User>()
+            for (user in it) {
+                Log.e("UserConnectionFragment", user.login)
+                listUser.add(user)
+            }
+            showRecyclerView(listUser)
+        }
     }
 
     override fun onDestroyView() {
@@ -54,12 +51,26 @@ class UserConnectionFragment : Fragment() {
         _binding = null
     }
 
+    private fun showRecyclerView(listUser: ArrayList<User>) {
+        val rvUsers = binding.rvUsers
+
+        // Add divider between item in recyclerview
+        val div = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
+        div.setDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.white)))
+        rvUsers.addItemDecoration(div)
+
+        rvUsers.layoutManager = LinearLayoutManager(requireActivity())
+        Log.e("RV", "masuk sini")
+        rvUsers.adapter = UserAdapter(listUser)
+    }
+
     companion object {
-        const val SECTION_NUMBER = "section_number"
-        const val LIST_USER = "list_user"
-        private val TAB_FRAGMENT = arrayOf(
-            "Follower",
-            "Following"
-        )
+        const val FOLLOWERS = 0
+        const val FOLLOWING = 1
+
+        fun instance(pos: Int): UserConnectionFragment =
+            UserConnectionFragment().apply {
+                position = pos
+            }
     }
 }

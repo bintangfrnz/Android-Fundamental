@@ -5,17 +5,11 @@
     style="@style/DefaultViewGroup"
     tools:context=".ui.detail.UserConnectionFragment">
 
-    <TextView
-        android:id="@+id/fragment_text"
-        style="@style/Content.Big"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_users"
         style="@style/RowContent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/fragment_text"
-        tools:listitem="@layout/card_view_user" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/card_view_simple" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

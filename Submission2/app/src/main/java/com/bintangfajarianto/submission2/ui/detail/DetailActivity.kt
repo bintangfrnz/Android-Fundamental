@@ -6,10 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
+import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
-import com.bintangfajarianto.submission2.adapter.UserConnectionAdapter
+import com.bintangfajarianto.submission2.adapter.FragmentAdapter
 import com.bintangfajarianto.submission2.databinding.ActivityDetailBinding
-import com.bintangfajarianto.submission2.model.User
+import com.bintangfajarianto.submission2.model.UserDetail
 import com.bintangfajarianto.submission2.ui.webview.WebViewActivity
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
@@ -31,56 +32,80 @@ class DetailActivity : AppCompatActivity() {
         val user = intent.getStringExtra(EXTRA_USERNAME) as String
         detailViewModel.findUser(user)
 
-        detailViewModel.user.observe(this) {
-            setUserData(it)
-        }
-        detailViewModel.isLoading1.observe(this) {
-            showLoading(it, 1)
-        }
-        detailViewModel.isLoading2.observe(this) {
-            showLoading(it, 2)
-        }
-
         binding.actionBarLayout.actionBarBack.setOnClickListener {
             finish()
         }
-
         binding.detailButton.setOnClickListener {
             val webviewIntent = Intent(this@DetailActivity, WebViewActivity::class.java)
             webviewIntent.putExtra(WebViewActivity.URL, detailViewModel.url)
             startActivity(webviewIntent)
         }
 
+        detailViewModel.user.observe(this) {
+            setUserData(it)
+        }
+        detailViewModel.isLoadingData.observe(this) {
+            showLoading(it, 1)
+        }
+
+        // get rv follower
+        detailViewModel.findFollower(user)
+        detailViewModel.isLoadingFragment.observe(this) {
+            showLoading(it, 2)
+        }
+
         // Fragment & Tab Layout
-        val userConnectionAdapter = UserConnectionAdapter(this)
+        val listFrag = mutableListOf<Fragment>(
+            UserConnectionFragment.instance(UserConnectionFragment.FOLLOWERS),
+            UserConnectionFragment.instance(UserConnectionFragment.FOLLOWING)
+        )
+
+        val fragmentAdapter = FragmentAdapter(this@DetailActivity, listFrag)
 
         val viewPager: ViewPager2 = binding.viewPager
-        viewPager.adapter = userConnectionAdapter
+        viewPager.adapter = fragmentAdapter
 
         val tabs: TabLayout = binding.tabs
         TabLayoutMediator(tabs, viewPager) {tab, position ->
             tab.text = TAB_TITLES[position]
         }.attach()
 
+        tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                if (tab?.position == UserConnectionFragment.FOLLOWERS) {
+                    detailViewModel.findFollower(user)
+                } else {
+                    detailViewModel.findFollowing(user)
+                }
+
+                detailViewModel.isLoadingFragment.observe(this@DetailActivity) {
+                    showLoading(it, 2)
+                }
+            }
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                detailViewModel.resetList()
+            }
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
     }
 
-    private fun setUserData(user: User) {
-        binding.detailName.text = user.name
-        binding.detailUsername.text = user.login
+    private fun setUserData(userDetail: UserDetail) {
+        binding.detailName.text = userDetail.name
+        binding.detailUsername.text = userDetail.login
         Glide.with(applicationContext)
-            .load(user.avatarUrl)
+            .load(userDetail.avatarUrl)
             .into(binding.detailAvatar)
-        binding.detailCompany.text = user.company
-        binding.detailLocation.text = user.location
+        binding.detailCompany.text = userDetail.company
+        binding.detailLocation.text = userDetail.location
 
         // Formatting number of Following, Follower and Repository
         val decimalFormat = CompactDecimalFormat.getInstance(Locale.US, CompactDecimalFormat.CompactStyle.SHORT)
         decimalFormat.maximumFractionDigits = 1
 
-        val follower = decimalFormat.format(user.followers) + " followers"
-        val following = decimalFormat.format(user.following) + " following"
-        val repo = decimalFormat.format(user.publicRepos) + " repository"
-        val gist = decimalFormat.format(user.publicGists) + " gist"
+        val follower = decimalFormat.format(userDetail.followers) + " followers"
+        val following = decimalFormat.format(userDetail.following) + " following"
+        val repo = decimalFormat.format(userDetail.publicRepos) + " repository"
+        val gist = decimalFormat.format(userDetail.publicGists) + " gist"
 
         binding.detailFollower.text = follower
         binding.detailFollowing.text = following
