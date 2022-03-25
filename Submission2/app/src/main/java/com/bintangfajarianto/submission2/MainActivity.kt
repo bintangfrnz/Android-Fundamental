@@ -6,7 +6,6 @@ import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.bintangfajarianto.submission2.ui.home.HomeActivity
-import com.bintangfajarianto.submission2.utils.Constants
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,6 +18,10 @@ class MainActivity : AppCompatActivity() {
             val intentHome = Intent(this@MainActivity, HomeActivity::class.java)
             startActivity(intentHome)
             finish()
-        }, Constants.SPLASH_DELAY)
+        }, SPLASH_DELAY)
+    }
+
+    companion object {
+        const val SPLASH_DELAY: Long = 3000
     }
 }

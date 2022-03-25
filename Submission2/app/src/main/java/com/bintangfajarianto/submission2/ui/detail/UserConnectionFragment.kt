@@ -2,7 +2,6 @@ package com.bintangfajarianto.submission2.ui.detail
 
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +14,6 @@ import com.bintangfajarianto.submission2.R
 import com.bintangfajarianto.submission2.adapter.UserAdapter
 import com.bintangfajarianto.submission2.databinding.FragmentUserConnectionBinding
 import com.bintangfajarianto.submission2.model.User
-import com.bintangfajarianto.submission2.utils.Constants
 
 class UserConnectionFragment : Fragment() {
 
@@ -37,9 +35,9 @@ class UserConnectionFragment : Fragment() {
 
         detailViewModel.listFollow.observe(viewLifecycleOwner) {
             val listUser = ArrayList<User>()
-            for (user in it) {
+            for (user in it)
                 listUser.add(user)
-            }
+
             showRecyclerView(listUser)
         }
 

@@ -31,7 +31,7 @@ class DetailViewModel : ViewModel() {
     private val _messageError = MutableLiveData<String>()
     val messageError: LiveData<String> = _messageError
 
-    private val _currentTab = MutableLiveData<Int>()
+    private val _currentTab = MutableLiveData(0)
     val currentTab: LiveData<Int> = _currentTab
 
     fun findUser(username: String) {
@@ -42,11 +42,10 @@ class DetailViewModel : ViewModel() {
                 _isLoadingData.value = false
 
                 if (response.isSuccessful) {
+                    Log.i(TAG, "FIND MY PROFILE")
                     val responseBody = response.body()
                     _user.value = responseBody!!
                     url = responseBody.htmlUrl
-
-                    _currentTab.value = 0
                 } else {
                     Log.e(TAG, "onFailure: ${response.message()}")
                 }
@@ -67,16 +66,13 @@ class DetailViewModel : ViewModel() {
             override fun onResponse(call: Call<List<User>>, response: Response<List<User>>) {
                 _isLoadingFragment.value = false
                 if (response.isSuccessful) {
-                    _currentTab.value = 0
+                    Log.i(TAG, "FIND MY FOLLOWER")
+
                     val responseBody = response.body()
-                    if (responseBody.isNullOrEmpty()) {
+                    _listFollow.value = responseBody!!
+
+                    if (responseBody.isNullOrEmpty())
                         _messageError.value = "0 Follower"
-                    } else {
-                        _listFollow.value = responseBody!!
-                        // actually, it doesn't need double-bang,
-                        // but idk why it shows error if not use it
-                        // but if i use it, i shows warn :(
-                    }
                 } else {
                     Log.e(TAG, "onFailure: ${response.message()}")
                 }
@@ -97,16 +93,13 @@ class DetailViewModel : ViewModel() {
                 _isLoadingFragment.value = false
 
                 if (response.isSuccessful) {
-                    _currentTab.value = 1
+                    Log.i(TAG, "FIND MY FOLLOWING")
+
                     val responseBody = response.body()
-                    if (responseBody.isNullOrEmpty()) {
+                    _listFollow.value = responseBody!!
+
+                    if (responseBody.isNullOrEmpty())
                         _messageError.value = "0 Following"
-                    } else {
-                        _listFollow.value = responseBody!!
-                        // actually, it doesn't need double-bang,
-                        // but idk why it shows error if not use it
-                        // but if i use it, i shows warn :(
-                    }
                 } else {
                     Log.e(TAG, "onFailure: ${response.message()}")
                 }
@@ -117,6 +110,10 @@ class DetailViewModel : ViewModel() {
                 Log.e(TAG, "onFailure: ${t.message}")
             }
         })
+    }
+
+    fun setTab(tab: Int) {
+        _currentTab.value = tab
     }
 
     fun resetList() {
