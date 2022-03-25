@@ -8,13 +8,36 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         style="@style/DefaultViewGroup" >
 
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/search_view"
+        <include
+            android:id="@+id/action_bar_layout"
+            layout="@layout/custom_action_bar" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_layout"
             style="@style/RowContent"
-            app:iconifiedByDefault="false"
-            app:queryHint="@string/cari_user"
+            android:background="@android:color/transparent"
+            android:hint="@string/cari_user"
+            android:textColorHint="@color/gray"
+            android:layout_marginHorizontal="4dp"
+            app:hintTextColor="@color/blue_light"
+            app:hintAnimationEnabled="true"
+            app:startIconTint="@color/blue_light"
+            app:startIconDrawable="@drawable/ic_person"
+            app:endIconMode="custom"
+            app:endIconTint="@color/blue_light"
+            app:endIconDrawable="@drawable/ic_search"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/action_bar_layout" >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/text_input_edit_text"
+                style="@style/RowContent"
+                android:background="@android:color/transparent"
+                android:backgroundTint="@color/blue_light"
+                android:textColor="@color/white"
+                android:inputType="text" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <ProgressBar
             android:id="@+id/progress_bar"
@@ -25,15 +48,14 @@
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/search_view"
+            app:layout_constraintTop_toBottomOf="@id/text_input_layout"
             tools:visibility="visible" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_users"
             style="@style/RowContent"
-            android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/search_view"
+            app:layout_constraintTop_toBottomOf="@+id/text_input_layout"
             tools:listitem="@layout/card_view_user" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

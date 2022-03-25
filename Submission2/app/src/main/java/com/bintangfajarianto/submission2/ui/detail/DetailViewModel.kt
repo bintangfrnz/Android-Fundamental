@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.bintangfajarianto.submission2.api.ApiConfig
 import com.bintangfajarianto.submission2.model.UserDetail
 import com.bintangfajarianto.submission2.model.User
+import com.bintangfajarianto.submission2.utils.Constants
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,6 +28,12 @@ class DetailViewModel : ViewModel() {
     private val _isLoadingFragment = MutableLiveData<Boolean>()
     val isLoadingFragment: LiveData<Boolean> = _isLoadingFragment
 
+    private val _messageError = MutableLiveData<String>()
+    val messageError: LiveData<String> = _messageError
+
+    private val _currentTab = MutableLiveData<Int>()
+    val currentTab: LiveData<Int> = _currentTab
+
     fun findUser(username: String) {
         _isLoadingData.value = true
         val client = ApiConfig.getApiService().getDetailUser(username)
@@ -38,6 +45,8 @@ class DetailViewModel : ViewModel() {
                     val responseBody = response.body()
                     _user.value = responseBody!!
                     url = responseBody.htmlUrl
+
+                    _currentTab.value = 0
                 } else {
                     Log.e(TAG, "onFailure: ${response.message()}")
                 }
@@ -54,12 +63,20 @@ class DetailViewModel : ViewModel() {
         _isLoadingFragment.value = true
         val client = ApiConfig.getApiService().getUserFollower(username)
         client.enqueue(object: Callback<List<User>> {
+
             override fun onResponse(call: Call<List<User>>, response: Response<List<User>>) {
                 _isLoadingFragment.value = false
-
                 if (response.isSuccessful) {
+                    _currentTab.value = 0
                     val responseBody = response.body()
-                    _listFollow.value = responseBody!!
+                    if (responseBody.isNullOrEmpty()) {
+                        _messageError.value = "0 Follower"
+                    } else {
+                        _listFollow.value = responseBody!!
+                        // actually, it doesn't need double-bang,
+                        // but idk why it shows error if not use it
+                        // but if i use it, i shows warn :(
+                    }
                 } else {
                     Log.e(TAG, "onFailure: ${response.message()}")
                 }
@@ -80,8 +97,16 @@ class DetailViewModel : ViewModel() {
                 _isLoadingFragment.value = false
 
                 if (response.isSuccessful) {
+                    _currentTab.value = 1
                     val responseBody = response.body()
-                    _listFollow.value = responseBody!!
+                    if (responseBody.isNullOrEmpty()) {
+                        _messageError.value = "0 Following"
+                    } else {
+                        _listFollow.value = responseBody!!
+                        // actually, it doesn't need double-bang,
+                        // but idk why it shows error if not use it
+                        // but if i use it, i shows warn :(
+                    }
                 } else {
                     Log.e(TAG, "onFailure: ${response.message()}")
                 }
@@ -96,6 +121,7 @@ class DetailViewModel : ViewModel() {
 
     fun resetList() {
         _listFollow.value = arrayListOf()
+        _messageError.value = Constants.BLANK
     }
 
     companion object {

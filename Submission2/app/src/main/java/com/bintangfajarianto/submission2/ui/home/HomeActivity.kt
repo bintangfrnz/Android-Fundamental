@@ -80,7 +80,7 @@ class HomeActivity : AppCompatActivity() {
             editText.clearFocus()
         } else {
             val searchIntent = Intent(this@HomeActivity, SearchActivity::class.java)
-            searchIntent.putExtra(SearchActivity.USERNAME, editText.text!!)
+            searchIntent.putExtra(SearchActivity.USERNAME, editText.text.toString())
 
             editText.setText(Constants.BLANK)
             editText.clearFocus()

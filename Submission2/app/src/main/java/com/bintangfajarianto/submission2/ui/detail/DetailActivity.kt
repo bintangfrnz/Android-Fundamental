@@ -28,10 +28,18 @@ class DetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         supportActionBar?.hide()
-
         val user = intent.getStringExtra(EXTRA_USERNAME) as String
-        detailViewModel.findUser(user)
 
+        // Initialize User Detail Profile
+        detailViewModel.findUser(user)
+        detailViewModel.user.observe(this) {
+            setUserData(it)
+        }
+        detailViewModel.isLoadingData.observe(this) {
+            showLoading(it, LOADING_DETAIL)
+        }
+
+        // Set up Button (need url to user github)
         binding.actionBarLayout.actionBarBack.setOnClickListener {
             finish()
         }
@@ -41,63 +49,51 @@ class DetailActivity : AppCompatActivity() {
             startActivity(webviewIntent)
         }
 
-        detailViewModel.user.observe(this) {
-            setUserData(it)
+        // Initialize RecyclerView
+        detailViewModel.currentTab.observe(this) {
+            setRecyclerView(it, user)
         }
-        detailViewModel.isLoadingData.observe(this) {
-            showLoading(it, 1)
-        }
-
-        // get rv follower
-        detailViewModel.findFollower(user)
         detailViewModel.isLoadingFragment.observe(this) {
-            showLoading(it, 2)
+            showLoading(it, LOADING_FRAGMENT)
         }
 
-        // Fragment & Tab Layout
+        // Initialize Fragment
         val listFrag = mutableListOf<Fragment>(
-            UserConnectionFragment.instance(UserConnectionFragment.FOLLOWERS),
-            UserConnectionFragment.instance(UserConnectionFragment.FOLLOWING)
+            createFrag(TAB_FOLLOWERS),
+            createFrag(TAB_FOLLOWING)
         )
-
         val fragmentAdapter = FragmentAdapter(this@DetailActivity, listFrag)
 
+        // Initialize TabLayout and ViewPager
+        val tabs: TabLayout = binding.tabs
         val viewPager: ViewPager2 = binding.viewPager
         viewPager.adapter = fragmentAdapter
 
-        val tabs: TabLayout = binding.tabs
-        TabLayoutMediator(tabs, viewPager) {tab, position ->
-            tab.text = TAB_TITLES[position]
+        TabLayoutMediator(tabs, viewPager) { tab, pos ->
+            tab.text = TAB_TITLES[pos]
         }.attach()
 
-        tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        tabs.addOnTabSelectedListener( object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                if (tab?.position == UserConnectionFragment.FOLLOWERS) {
+                if (tab?.position == TAB_FOLLOWERS)
                     detailViewModel.findFollower(user)
-                } else {
+                else
                     detailViewModel.findFollowing(user)
-                }
 
                 detailViewModel.isLoadingFragment.observe(this@DetailActivity) {
-                    showLoading(it, 2)
+                    showLoading(it, LOADING_FRAGMENT)
                 }
             }
             override fun onTabUnselected(tab: TabLayout.Tab?) {
                 detailViewModel.resetList()
             }
-            override fun onTabReselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                // Do Nothing
+            }
         })
     }
 
     private fun setUserData(userDetail: UserDetail) {
-        binding.detailName.text = userDetail.name
-        binding.detailUsername.text = userDetail.login
-        Glide.with(applicationContext)
-            .load(userDetail.avatarUrl)
-            .into(binding.detailAvatar)
-        binding.detailCompany.text = userDetail.company
-        binding.detailLocation.text = userDetail.location
-
         // Formatting number of Following, Follower and Repository
         val decimalFormat = CompactDecimalFormat.getInstance(Locale.US, CompactDecimalFormat.CompactStyle.SHORT)
         decimalFormat.maximumFractionDigits = 1
@@ -107,14 +103,30 @@ class DetailActivity : AppCompatActivity() {
         val repo = decimalFormat.format(userDetail.publicRepos) + " repository"
         val gist = decimalFormat.format(userDetail.publicGists) + " gist"
 
-        binding.detailFollower.text = follower
-        binding.detailFollowing.text = following
-        binding.detailRepository.text = repo
-        binding.detailGist.text = gist
+        binding.apply {
+            detailName.text = userDetail.name
+            detailUsername.text = userDetail.login
+            Glide.with(applicationContext)
+                .load(userDetail.avatarUrl)
+                .into(detailAvatar)
+            detailCompany.text = userDetail.company
+            detailLocation.text = userDetail.location
+            detailFollower.text = follower
+            detailFollowing.text = following
+            detailRepository.text = repo
+            detailGist.text = gist
+        }
+    }
+
+    private fun setRecyclerView(tab: Int, user: String) {
+        if (tab == TAB_FOLLOWERS)
+            detailViewModel.findFollower(user)
+        else
+            detailViewModel.findFollowing(user)
     }
 
     private fun showLoading(isLoading: Boolean, nBar: Int) {
-        if (nBar == 1)
+        if (nBar == LOADING_DETAIL)
             binding.progressBar1.visibility = if (isLoading) View.VISIBLE else View.GONE
         else
             binding.progressBar2.visibility = if (isLoading) View.VISIBLE else View.GONE
@@ -122,10 +134,19 @@ class DetailActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_USERNAME = "extra_username"
+        const val TAB_FOLLOWERS = 0
+        const val TAB_FOLLOWING = 1
+        const val LOADING_DETAIL = 0
+        const val LOADING_FRAGMENT = 1
 
         private val TAB_TITLES = arrayOf(
             "Follower",
             "Following"
         )
+
+        fun createFrag(pos: Int): UserConnectionFragment =
+            UserConnectionFragment().apply {
+                position = pos
+            }
     }
 }

@@ -23,33 +23,37 @@ class ProfileActivity : AppCompatActivity() {
         val myProfile = intent.getParcelableExtra<Profile>(EXTRA_PROFILE) as Profile
         setProfile(myProfile)
 
-        binding.profileButton.setOnClickListener {
-            var uri = Uri.parse("http://instagram.com/_u/${myProfile.username}/")
-            var igIntent = Intent(Intent.ACTION_VIEW, uri)
-            igIntent.setPackage("com.instagram.android")
+        // Set up Button
+        binding.apply {
+            profileButton.setOnClickListener {
+                var uri = Uri.parse("http://instagram.com/_u/${myProfile.username}/")
+                var igIntent = Intent(Intent.ACTION_VIEW, uri).setPackage("com.instagram.android")
 
-            try {
-                startActivity(igIntent)
-            } catch (e: ActivityNotFoundException) {
-                uri = Uri.parse("http://instagram.com/${myProfile.username}/")
-                igIntent = Intent(Intent.ACTION_VIEW, uri)
-                startActivity(igIntent)
+                try {
+                    startActivity(igIntent)
+                } catch (e: ActivityNotFoundException) {
+                    uri = Uri.parse("http://instagram.com/${myProfile.username}/")
+                    igIntent = Intent(Intent.ACTION_VIEW, uri)
+                    startActivity(igIntent)
+                }
             }
-        }
 
-        binding.actionBarLayout.actionBarBack.setOnClickListener {
-            finish()
+            actionBarLayout.actionBarBack.setOnClickListener {
+                finish()
+            }
         }
     }
 
     private fun setProfile(profile: Profile) {
-        binding.profileName.text = profile.fullname
-        binding.profileUsername.text = profile.username
-        binding.profileCompany.text = profile.company
-        binding.profileLocation.text = profile.location
-        Glide.with(applicationContext)
-            .load(profile.avatar)
-            .into(binding.profileAvatar)
+        binding.apply {
+            profileName.text = profile.fullname
+            profileUsername.text = profile.username
+            profileCompany.text = profile.company
+            profileLocation.text = profile.location
+            Glide.with(applicationContext)
+                .load(profile.avatar)
+                .into(profileAvatar)
+        }
     }
 
     companion object {

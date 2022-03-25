@@ -15,18 +15,19 @@ import com.bintangfajarianto.submission2.R
 import com.bintangfajarianto.submission2.adapter.UserAdapter
 import com.bintangfajarianto.submission2.databinding.FragmentUserConnectionBinding
 import com.bintangfajarianto.submission2.model.User
+import com.bintangfajarianto.submission2.utils.Constants
 
 class UserConnectionFragment : Fragment() {
 
     private var _binding: FragmentUserConnectionBinding? = null
     private val binding get() = _binding!!
     private val detailViewModel by activityViewModels<DetailViewModel>()
-    private var position = 0
+    var position = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentUserConnectionBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -34,15 +35,16 @@ class UserConnectionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.e("FRAGMENT", "CREATED")
-
         detailViewModel.listFollow.observe(viewLifecycleOwner) {
             val listUser = ArrayList<User>()
             for (user in it) {
-                Log.e("UserConnectionFragment", user.login)
                 listUser.add(user)
             }
             showRecyclerView(listUser)
+        }
+
+        detailViewModel.messageError.observe(viewLifecycleOwner) {
+            binding.errorMessage.text = it
         }
     }
 
@@ -60,17 +62,6 @@ class UserConnectionFragment : Fragment() {
         rvUsers.addItemDecoration(div)
 
         rvUsers.layoutManager = LinearLayoutManager(requireActivity())
-        Log.e("RV", "masuk sini")
         rvUsers.adapter = UserAdapter(listUser)
-    }
-
-    companion object {
-        const val FOLLOWERS = 0
-        const val FOLLOWING = 1
-
-        fun instance(pos: Int): UserConnectionFragment =
-            UserConnectionFragment().apply {
-                position = pos
-            }
     }
 }

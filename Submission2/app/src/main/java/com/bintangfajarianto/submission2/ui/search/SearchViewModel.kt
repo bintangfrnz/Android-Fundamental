@@ -20,45 +20,38 @@ class SearchViewModel : ViewModel() {
     private val _totalUser = MutableLiveData<Int>()
     val totalUser: LiveData<Int> = _totalUser
 
-    private val _listUserItem = MutableLiveData<List<User>>()
-    val listUserItem: LiveData<List<User>> = _listUserItem
-
-    private val _listUser = MutableLiveData<List<UserDetail>>()
-    val listUserDetail: LiveData<List<UserDetail>> = _listUser
+    private val _listUser = MutableLiveData<List<User>>()
+    val listUser: LiveData<List<User>> = _listUser
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-//    fun search(username: String) {
-//        _isLoading.value = true
-//        val client = ApiConfig.getApiService().searchUser(username)
-//        client.enqueue(object: Callback<SearchUser> {
-//            override fun onResponse(call: Call<SearchUser>, response: Response<SearchUser>) {
-////                _isLoading.value = false
-//                if (response.isSuccessful) {
-//                    val responseBody = response.body()
-//                    if (responseBody != null) {
-//                        _totalUser.value = responseBody.totalCount
-//                        _listUserItem.value = responseBody.users
-////                        getDetailUser()
-//                    }
-//                } else {
-//                    Log.e(TAG, "onFailute: ${response.message()}")
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<SearchUser>, t: Throwable) {
-//                _isLoading.value = false
-//                Log.e(TAG, "onFailure: ${t.message}")
-//            }
-//        })
-//    }
+    fun search(username: String) {
+        _textInput.value = username
+        getUsersByUsername(username)
+    }
 
-//    private fun getDetailUser() {
-//        for (user in _listUserItem) {
-//
-//        }
-//    }
+    private fun getUsersByUsername(username: String) {
+        _isLoading.value = true
+        val client = ApiConfig.getApiService().searchUser(username)
+        client.enqueue(object: Callback<SearchUser> {
+            override fun onResponse(call: Call<SearchUser>, response: Response<SearchUser>) {
+                _isLoading.value = false
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    _totalUser.value = responseBody?.totalCount
+                    _listUser.value = responseBody?.users
+                } else {
+                    Log.e(TAG, "onFailute: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<SearchUser>, t: Throwable) {
+                _isLoading.value = false
+                Log.e(TAG, "onFailure: ${t.message}")
+            }
+        })
+    }
 
     companion object {
         private const val TAG = "SearchViewModel"
