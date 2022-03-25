@@ -8,6 +8,7 @@ import com.bintangfajarianto.submission2.api.ApiConfig
 import com.bintangfajarianto.submission2.model.SearchUser
 import com.bintangfajarianto.submission2.model.UserDetail
 import com.bintangfajarianto.submission2.model.User
+import com.bintangfajarianto.submission2.utils.Constants
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -16,6 +17,9 @@ class SearchViewModel : ViewModel() {
 
     private val _textInput = MutableLiveData<String>()
     val textInput: LiveData<String> = _textInput
+
+    private val _messageError = MutableLiveData<String>()
+    val messageError: LiveData<String> = _messageError
 
     private val _totalUser = MutableLiveData<Int>()
     val totalUser: LiveData<Int> = _totalUser
@@ -41,6 +45,10 @@ class SearchViewModel : ViewModel() {
                     val responseBody = response.body()
                     _totalUser.value = responseBody?.totalCount
                     _listUser.value = responseBody?.users
+                    _messageError.value = Constants.BLANK
+
+                    if (responseBody?.totalCount == 0)
+                        _messageError.value = "$username tidak ditemukan"
                 } else {
                     Log.e(TAG, "onFailute: ${response.message()}")
                 }
@@ -51,6 +59,11 @@ class SearchViewModel : ViewModel() {
                 Log.e(TAG, "onFailure: ${t.message}")
             }
         })
+    }
+
+    fun reset() {
+        _listUser.value = arrayListOf()
+        _messageError.value = "No Input"
     }
 
     companion object {

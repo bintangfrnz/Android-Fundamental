@@ -1,23 +1,21 @@
 package com.bintangfajarianto.submission2.ui.search
 
-import android.content.Intent
 import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.KeyEvent
 import android.view.View
-import android.widget.Toast
+import android.widget.ImageView
+import android.widget.SearchView
+import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bintangfajarianto.submission2.R
-import com.bintangfajarianto.submission2.adapter.HomeRVAdapter
 import com.bintangfajarianto.submission2.adapter.UserAdapter
 import com.bintangfajarianto.submission2.databinding.ActivitySearchBinding
 import com.bintangfajarianto.submission2.model.User
-import com.bintangfajarianto.submission2.utils.Constants
+
 
 class SearchActivity : AppCompatActivity() {
 
@@ -31,63 +29,67 @@ class SearchActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
-        binding.textInputEditText.setOnKeyListener { _, keyCode, event ->
-            when {
-                (keyCode == KeyEvent.KEYCODE_ENTER) && (event.action == KeyEvent.ACTION_DOWN) -> {
-                    searchOnClick()
-                    return@setOnKeyListener true
-                }
-                else -> false
-            }
-        }
+        // Customize SearchView Color
+        val searchView = binding.searchView
+        val searchIcon: ImageView = searchView.findViewById(androidx.appcompat.R.id.search_mag_icon)
+        val searchHintIcon: ImageView = searchView.findViewById(androidx.appcompat.R.id.search_voice_btn)
+        val closeIcon: ImageView = searchView.findViewById(androidx.appcompat.R.id.search_close_btn)
+        val hintText: TextView = searchView.findViewById(androidx.appcompat.R.id.search_src_text)
+//        searchIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_search))
+        searchIcon.setColorFilter(ContextCompat.getColor(applicationContext, R.color.blue_light))
+        searchHintIcon.setColorFilter(ContextCompat.getColor(applicationContext, R.color.blue_light))
+        closeIcon.setColorFilter(ContextCompat.getColor(applicationContext, R.color.blue_light))
+        hintText.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
 
-        binding.textInputLayout.setEndIconOnClickListener {
-            searchOnClick()
-        }
 
+        // Initial search
         val username = intent.getStringExtra(USERNAME) ?: "bintangfrnz"
+        binding.searchView.setQuery(username, false)
         searchViewModel.search(username)
+
+        // Set up SearchView
+        binding.searchView.setOnQueryTextListener( object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                binding.searchView.clearFocus()
+                return true
+            }
+
+            override fun onQueryTextChange(query: String?): Boolean {
+                if (query.toString().isEmpty()) {
+                    searchViewModel.reset()
+                } else {
+                    searchViewModel.search(query.toString())
+                }
+                return true
+            }
+        })
 
         binding.actionBarLayout.actionBarBack.setOnClickListener {
             finish()
         }
 
-        searchViewModel.textInput.observe(this) {
-            binding.textInputEditText.setText(it)
-        }
-
         searchViewModel.listUser.observe(this) {
             val listUser = ArrayList<User>()
-            for (user in it) {
-                Log.e("UserConnectionFragment", user.login)
+            for (user in it)
                 listUser.add(user)
-            }
-            showRecyclerView(listUser)
+
+            setRecyclerView(listUser)
+        }
+
+        searchViewModel.messageError.observe(this) {
+            binding.errorMessage.text = it
         }
 
         searchViewModel.isLoading.observe(this) {
-            showLoading(it)
+            setLoading(it)
         }
     }
 
-    private fun showLoading(isLoading: Boolean) {
+    private fun setLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    private fun searchOnClick() {
-        val editText = binding.textInputEditText
-
-        if (editText.text!!.isEmpty()) {
-            Toast.makeText(this, "Empty", Toast.LENGTH_SHORT).show()
-            editText.clearFocus()
-        } else {
-            val searchIntent = Intent(this@SearchActivity, SearchActivity::class.java)
-            searchIntent.putExtra(USERNAME, editText.text!!)
-            startActivity(searchIntent)
-        }
-    }
-
-    private fun showRecyclerView(listUser: ArrayList<User>) {
+    private fun setRecyclerView(listUser: ArrayList<User>) {
         val rvUsers = binding.rvUsers
 
         // Add divider between item in recyclerview
