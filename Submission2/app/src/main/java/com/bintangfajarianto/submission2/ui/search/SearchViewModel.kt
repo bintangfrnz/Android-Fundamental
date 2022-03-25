@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.bintangfajarianto.submission2.api.ApiConfig
 import com.bintangfajarianto.submission2.model.SearchUser
-import com.bintangfajarianto.submission2.model.UserDetail
 import com.bintangfajarianto.submission2.model.User
 import com.bintangfajarianto.submission2.utils.Constants
 import retrofit2.Call
@@ -20,9 +19,6 @@ class SearchViewModel : ViewModel() {
 
     private val _messageError = MutableLiveData<String>()
     val messageError: LiveData<String> = _messageError
-
-    private val _totalUser = MutableLiveData<Int>()
-    val totalUser: LiveData<Int> = _totalUser
 
     private val _listUser = MutableLiveData<List<User>>()
     val listUser: LiveData<List<User>> = _listUser
@@ -43,7 +39,6 @@ class SearchViewModel : ViewModel() {
                 _isLoading.value = false
                 if (response.isSuccessful) {
                     val responseBody = response.body()
-                    _totalUser.value = responseBody?.totalCount
                     _listUser.value = responseBody?.users
                     _messageError.value = Constants.BLANK
 

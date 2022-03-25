@@ -4,7 +4,6 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
-import android.widget.SearchView
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -15,7 +14,6 @@ import com.bintangfajarianto.submission2.R
 import com.bintangfajarianto.submission2.adapter.UserAdapter
 import com.bintangfajarianto.submission2.databinding.ActivitySearchBinding
 import com.bintangfajarianto.submission2.model.User
-
 
 class SearchActivity : AppCompatActivity() {
 
@@ -35,12 +33,10 @@ class SearchActivity : AppCompatActivity() {
         val searchHintIcon: ImageView = searchView.findViewById(androidx.appcompat.R.id.search_voice_btn)
         val closeIcon: ImageView = searchView.findViewById(androidx.appcompat.R.id.search_close_btn)
         val hintText: TextView = searchView.findViewById(androidx.appcompat.R.id.search_src_text)
-//        searchIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_search))
         searchIcon.setColorFilter(ContextCompat.getColor(applicationContext, R.color.blue_light))
         searchHintIcon.setColorFilter(ContextCompat.getColor(applicationContext, R.color.blue_light))
         closeIcon.setColorFilter(ContextCompat.getColor(applicationContext, R.color.blue_light))
         hintText.setTextColor(ContextCompat.getColor(applicationContext, R.color.white))
-
 
         // Initial search
         val username = intent.getStringExtra(USERNAME) ?: "bintangfrnz"
