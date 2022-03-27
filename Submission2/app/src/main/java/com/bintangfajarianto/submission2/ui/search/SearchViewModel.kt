@@ -14,6 +14,8 @@ import retrofit2.Response
 
 class SearchViewModel : ViewModel() {
 
+    var isQueryChanged: Boolean = false
+
     private val _textInput = MutableLiveData<String>()
     val textInput: LiveData<String> = _textInput
 
@@ -27,11 +29,11 @@ class SearchViewModel : ViewModel() {
     val isLoading: LiveData<Boolean> = _isLoading
 
     fun search(username: String) {
-        _textInput.value = username
+        isQueryChanged = true
         getUsersByUsername(username)
     }
 
-    private fun getUsersByUsername(username: String) {
+    fun getUsersByUsername(username: String) {
         _isLoading.value = true
         val client = ApiConfig.getApiService().searchUser(username)
         client.enqueue(object: Callback<SearchUser> {
@@ -41,6 +43,7 @@ class SearchViewModel : ViewModel() {
                     val responseBody = response.body()
                     _listUser.value = responseBody?.users
                     _messageError.value = Constants.BLANK
+                    _textInput.value = username
 
                     if (responseBody?.totalCount == 0)
                         _messageError.value = "$username tidak ditemukan"

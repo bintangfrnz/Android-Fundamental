@@ -41,7 +41,8 @@ class SearchActivity : AppCompatActivity() {
         // Initial search
         val username = intent.getStringExtra(USERNAME) ?: "bintangfrnz"
         binding.searchView.setQuery(username, false)
-        searchViewModel.search(username)
+        if (!searchViewModel.isQueryChanged)
+            searchViewModel.search(username)
 
         // Set up SearchView
         binding.searchView.setOnQueryTextListener( object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
@@ -54,7 +55,7 @@ class SearchActivity : AppCompatActivity() {
                 if (query.toString().isEmpty()) {
                     searchViewModel.reset()
                 } else {
-                    searchViewModel.search(query.toString())
+                    searchViewModel.getUsersByUsername(query.toString())
                 }
                 return true
             }

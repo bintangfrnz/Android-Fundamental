@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import com.bintangfajarianto.submission2.api.ApiConfig
 import com.bintangfajarianto.submission2.model.UserDetail
 import com.bintangfajarianto.submission2.model.User
-import com.bintangfajarianto.submission2.utils.Constants
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -15,12 +14,16 @@ import retrofit2.Response
 class DetailViewModel : ViewModel() {
 
     lateinit var url: String
+    var isAllLoaded: Boolean = false
 
     private val _user = MutableLiveData<UserDetail>()
     val user: LiveData<UserDetail> = _user
 
-    private val _listFollow = MutableLiveData<List<User>>()
-    val listFollow: LiveData<List<User>> = _listFollow
+    private val _listFollower = MutableLiveData<List<User>>()
+    val listFollower: LiveData<List<User>> = _listFollower
+
+    private val _listFollowing = MutableLiveData<List<User>>()
+    val listFollowing: LiveData<List<User>> = _listFollowing
 
     private val _isLoadingData = MutableLiveData<Boolean>()
     val isLoadingData: LiveData<Boolean> = _isLoadingData
@@ -28,8 +31,11 @@ class DetailViewModel : ViewModel() {
     private val _isLoadingFragment = MutableLiveData<Boolean>()
     val isLoadingFragment: LiveData<Boolean> = _isLoadingFragment
 
-    private val _messageError = MutableLiveData<String>()
-    val messageError: LiveData<String> = _messageError
+    private val _messageErrorFollower = MutableLiveData<String>()
+    val messageErrorFollower : LiveData<String> = _messageErrorFollower
+
+    private val _messageErrorFollowing = MutableLiveData<String>()
+    val messageErrorFollowing: LiveData<String> = _messageErrorFollowing
 
     private val _currentTab = MutableLiveData(0)
     val currentTab: LiveData<Int> = _currentTab
@@ -69,10 +75,10 @@ class DetailViewModel : ViewModel() {
                     Log.i(TAG, "FIND MY FOLLOWER")
 
                     val responseBody = response.body()
-                    _listFollow.value = responseBody!!
+                    _listFollower.value = responseBody!!
 
                     if (responseBody.isNullOrEmpty())
-                        _messageError.value = "0 Follower"
+                        _messageErrorFollower.value = "0 Followers"
                 } else {
                     Log.e(TAG, "onFailure: ${response.message()}")
                 }
@@ -96,10 +102,11 @@ class DetailViewModel : ViewModel() {
                     Log.i(TAG, "FIND MY FOLLOWING")
 
                     val responseBody = response.body()
-                    _listFollow.value = responseBody!!
+                    _listFollowing.value = responseBody!!
+                    isAllLoaded = true
 
                     if (responseBody.isNullOrEmpty())
-                        _messageError.value = "0 Following"
+                        _messageErrorFollowing.value = "0 Following"
                 } else {
                     Log.e(TAG, "onFailure: ${response.message()}")
                 }
@@ -114,11 +121,6 @@ class DetailViewModel : ViewModel() {
 
     fun setTab(tab: Int) {
         _currentTab.value = tab
-    }
-
-    fun resetList() {
-        _listFollow.value = arrayListOf()
-        _messageError.value = Constants.BLANK
     }
 
     companion object {

@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
-import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.bintangfajarianto.submission2.adapter.FragmentAdapter
 import com.bintangfajarianto.submission2.databinding.ActivityDetailBinding
@@ -37,7 +36,7 @@ class DetailActivity : AppCompatActivity() {
             setUserData(it)
         }
         detailViewModel.isLoadingData.observe(this) {
-            setLoading(it, LOADING_DETAIL)
+            setLoading(it)
         }
 
         // Set up Button (need url to user github)
@@ -56,11 +55,7 @@ class DetailActivity : AppCompatActivity() {
         }
 
         // Initialize Fragment
-        val listFrag = mutableListOf<Fragment>(
-            createFragment(Constants.TAB_FOLLOWERS),
-            createFragment(Constants.TAB_FOLLOWING)
-        )
-        val fragmentAdapter = FragmentAdapter(this@DetailActivity, listFrag)
+        val fragmentAdapter = FragmentAdapter(this@DetailActivity)
 
         // Initialize TabLayout and ViewPager
         val tabs: TabLayout = binding.tabs
@@ -79,7 +74,7 @@ class DetailActivity : AppCompatActivity() {
                     detailViewModel.setTab(Constants.TAB_FOLLOWING)
             }
             override fun onTabUnselected(tab: TabLayout.Tab?) {
-                detailViewModel.resetList()
+                // Do Nothing
             }
             override fun onTabReselected(tab: TabLayout.Tab?) {
                 // Do Nothing
@@ -116,36 +111,24 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun setRecyclerView(tab: Int, user: String) {
-        if (tab == Constants.TAB_FOLLOWERS)
-            detailViewModel.findFollower(user)
-        else
-            detailViewModel.findFollowing(user)
-
-        detailViewModel.isLoadingFragment.observe(this) {
-            setLoading(it, LOADING_FRAGMENT)
+        if (!detailViewModel.isAllLoaded) {
+            if (tab == Constants.TAB_FOLLOWERS)
+                detailViewModel.findFollower(user)
+            else
+                detailViewModel.findFollowing(user)
         }
     }
 
-    private fun setLoading(isLoading: Boolean, nBar: Int) {
-        if (nBar == LOADING_DETAIL)
-            binding.progressBarDetail.visibility = if (isLoading) View.VISIBLE else View.GONE
-        else
-            binding.progressBarFragment.visibility = if (isLoading) View.VISIBLE else View.GONE
+    private fun setLoading(isLoading: Boolean) {
+        binding.progressBarDetail.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     companion object {
         const val EXTRA_USERNAME = "extra_username"
-        const val LOADING_DETAIL = 0
-        const val LOADING_FRAGMENT = 1
 
         private val TAB_TITLES = arrayOf(
             "Follower",
             "Following"
         )
-
-        fun createFragment(pos: Int): UserConnectionFragment =
-            UserConnectionFragment().apply {
-                position = pos
-            }
     }
 }

@@ -12,28 +12,27 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bintangfajarianto.submission2.R
 import com.bintangfajarianto.submission2.adapter.UserAdapter
-import com.bintangfajarianto.submission2.databinding.FragmentUserConnectionBinding
+import com.bintangfajarianto.submission2.databinding.FragmentFollowerBinding
 import com.bintangfajarianto.submission2.model.User
 
-class UserConnectionFragment : Fragment() {
+class FollowerFragment : Fragment() {
 
-    private var _binding: FragmentUserConnectionBinding? = null
+    private var _binding: FragmentFollowerBinding? = null
     private val binding get() = _binding!!
     private val detailViewModel by activityViewModels<DetailViewModel>()
-    var position = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentUserConnectionBinding.inflate(inflater, container, false)
+        _binding = FragmentFollowerBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        detailViewModel.listFollow.observe(viewLifecycleOwner) {
+        detailViewModel.listFollower.observe(viewLifecycleOwner) {
             val listUser = ArrayList<User>()
             for (user in it)
                 listUser.add(user)
@@ -41,7 +40,11 @@ class UserConnectionFragment : Fragment() {
             showRecyclerView(listUser)
         }
 
-        detailViewModel.messageError.observe(viewLifecycleOwner) {
+        detailViewModel.isLoadingFragment.observe(viewLifecycleOwner) {
+            setLoading(it)
+        }
+
+        detailViewModel.messageErrorFollower.observe(viewLifecycleOwner) {
             binding.errorMessage.text = it
         }
     }
@@ -61,5 +64,9 @@ class UserConnectionFragment : Fragment() {
 
         rvUsers.layoutManager = LinearLayoutManager(requireActivity())
         rvUsers.adapter = UserAdapter(listUser)
+    }
+
+    private fun setLoading(isLoading: Boolean) {
+        binding.progressBarFragment.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 }
