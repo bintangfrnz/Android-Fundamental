@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Github Color Palette by designpieces.com -->
+    <color name="blue">#FF4078C0</color>
+    <color name="green">#FF6CC644</color>
+    <color name="red">#FFBD2C00</color>
+    <color name="orange">#FFC9510C</color>
+    <color name="purple">#FF6E5494</color>
+    <color name="white">#FFFAFAFA</color>
+    <color name="gray">#FFC9D1D9</color>
+    <!-- Color Picker from Github Dashboard -->
+    <color name="blue_light">#FF58A6FF</color>
+    <color name="green_dark">#FF238636</color>
+    <color name="dark_1">#FF161B22</color>
+    <color name="dark_2">#FF0D1117</color>
+    <color name="dark_3">#FF010409</color>
+    <!-- Default -->
+    <color name="BLACK">#FF000000</color>
+    <color name="WHITE">#FFFFFFFF</color>
+</resources>
