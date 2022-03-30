@@ -28,4 +28,5 @@
     <string name="unfollow">Unfollow</string>
     <string name="open_ig">Open Instagram</string>
     <string name="open_github">Open Github</string>
+    <string name="clear_all">Remove All</string>
 </resources>

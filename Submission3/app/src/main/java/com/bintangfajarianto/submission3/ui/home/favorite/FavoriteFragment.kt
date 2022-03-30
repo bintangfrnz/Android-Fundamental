@@ -39,12 +39,18 @@ class FavoriteFragment : Fragment() {
 
             if (listUser.size == 0) {
                 val errorMsg = "No Favorite"
+                binding.clearButton.visibility = View.GONE
                 binding.errorMessage.text = errorMsg
             } else {
+                binding.clearButton.visibility = View.VISIBLE
                 binding.errorMessage.text = Constants.BLANK
             }
 
             setRecyclerView(listUser)
+        }
+
+        binding.clearButton.setOnClickListener {
+            favViewModel.removeAll()
         }
     }
 
