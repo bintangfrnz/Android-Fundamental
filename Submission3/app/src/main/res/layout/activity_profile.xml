@@ -85,6 +85,7 @@
         android:id="@+id/profile_button"
         style="@style/Content.Button"
         android:text="@string/open_ig"
+        android:background="@drawable/button_background"
         app:layout_constraintStart_toStartOf="@id/profile_name"
         app:layout_constraintTop_toBottomOf="@id/profile_avatar"/>
 
