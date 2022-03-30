@@ -20,6 +20,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:queryBackground="@android:color/transparent" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_users"
+            style="@style/RowContent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/search_view"
+            tools:listitem="@layout/card_view_simple" />
+
         <ProgressBar
             android:id="@+id/progress_bar"
             style="?android:attr/progressBarStyle"
@@ -31,13 +38,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/search_view"
             tools:visibility="visible" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_users"
-            style="@style/RowContent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/search_view"
-            tools:listitem="@layout/card_view_simple" />
 
         <TextView
             android:id="@+id/error_message"

@@ -1,22 +1,19 @@
-package com.bintangfajarianto.submission3.ui.home
+package com.bintangfajarianto.submission3.ui.detail
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.bintangfajarianto.submission3.ui.home.search.SearchFragment
-import com.bintangfajarianto.submission3.ui.home.favorite.FavoriteFragment
 
-class HomeAdapter(activity: FragmentActivity)
+class DetailFragmentAdapter(activity: FragmentActivity)
     : FragmentStateAdapter(activity) {
 
     override fun createFragment(position: Int): Fragment {
         var fragment = Fragment()
         when (position) {
-            0 -> fragment = SearchFragment()
-            1 -> fragment = FavoriteFragment()
+            0 -> fragment = FollowerFragment()
+            1 -> fragment = FollowingFragment()
         }
         return fragment
     }
-
     override fun getItemCount(): Int = 2
 }

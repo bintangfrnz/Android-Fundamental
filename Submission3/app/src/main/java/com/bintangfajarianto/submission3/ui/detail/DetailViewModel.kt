@@ -4,9 +4,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.bintangfajarianto.submission3.data.local.entity.UserEntity
 import com.bintangfajarianto.submission3.data.remote.api.ApiConfig
 import com.bintangfajarianto.submission3.data.remote.response.User
 import com.bintangfajarianto.submission3.data.remote.response.UserDetail
+import com.bintangfajarianto.submission3.utils.Constants
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -14,6 +16,7 @@ import retrofit2.Response
 class DetailViewModel : ViewModel() {
 
     lateinit var url: String
+    lateinit var userEntity: UserEntity
     var isAllLoaded: Boolean = false
 
     private val _user = MutableLiveData<UserDetail>()
@@ -46,12 +49,14 @@ class DetailViewModel : ViewModel() {
         client.enqueue(object: Callback<UserDetail> {
             override fun onResponse(call: Call<UserDetail>, response: Response<UserDetail>) {
                 _isLoadingData.value = false
-
                 if (response.isSuccessful) {
                     Log.i(TAG, "FIND MY PROFILE")
                     val responseBody = response.body()
-                    _user.value = responseBody!!
-                    url = responseBody.htmlUrl
+                    if (responseBody != null) {
+                        _user.value = responseBody!!
+                        url = responseBody.htmlUrl
+                        convertType(responseBody)
+                    }
                 } else {
                     Log.e(TAG, "onFailure: ${response.message()}")
                 }
@@ -117,6 +122,16 @@ class DetailViewModel : ViewModel() {
                 Log.e(TAG, "onFailure: ${t.message}")
             }
         })
+    }
+
+    fun convertType(user: UserDetail?) {
+        userEntity = UserEntity(
+            user?.login ?: Constants.DASH,
+            user?.name ?: Constants.DASH,
+            user?.avatarUrl ?: Constants.BLANK,
+            user?.company ?: Constants.DASH,
+            user?.location ?: Constants.DASH
+        )
     }
 
     fun setTab(tab: Int) {

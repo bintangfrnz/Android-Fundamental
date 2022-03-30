@@ -10,9 +10,15 @@ class UserEntity(
     @field:PrimaryKey
     val username: String,
 
+    @field:ColumnInfo(name = "name")
+    val name: String,
+
     @field:ColumnInfo(name = "avatarUrl")
     val avatarUrl: String,
 
-    @field:ColumnInfo(name = "favorite")
-    var isFavorite: Boolean
+    @field:ColumnInfo(name = "company")
+    val company: String,
+
+    @field:ColumnInfo(name = "location")
+    val location: String
 )

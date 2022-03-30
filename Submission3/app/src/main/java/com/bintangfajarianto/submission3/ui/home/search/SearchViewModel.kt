@@ -29,6 +29,7 @@ class SearchViewModel : ViewModel() {
         client.enqueue(object: Callback<SearchUser> {
             override fun onResponse(call: Call<SearchUser>, response: Response<SearchUser>) {
                 _isLoading.value = false
+                Log.e("SearchUser", "Error")
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     _listUser.value = responseBody?.users

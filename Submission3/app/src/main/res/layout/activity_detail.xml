@@ -203,5 +203,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tabs" />
 
+        <ToggleButton
+            android:id="@+id/toggle_button"
+            style="@style/CircleImage.Tiny"
+            android:background="@drawable/favorite_selector"
+            android:textOff=""
+            android:textOn=""
+            app:layout_constraintTop_toTopOf="@id/detail_name"
+            app:layout_constraintBottom_toBottomOf="@id/detail_username"
+            app:layout_constraintEnd_toStartOf="@id/guideline_right"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

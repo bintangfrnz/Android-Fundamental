@@ -5,10 +5,16 @@ import android.icu.text.CompactDecimalFormat
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
+import com.bintangfajarianto.submission3.R
+import com.bintangfajarianto.submission3.data.local.entity.UserEntity
 import com.bintangfajarianto.submission3.data.remote.response.UserDetail
 import com.bintangfajarianto.submission3.databinding.ActivityDetailBinding
+import com.bintangfajarianto.submission3.ui.home.favorite.FavoriteViewModel
+import com.bintangfajarianto.submission3.ui.home.favorite.ViewModelFactory
 import com.bintangfajarianto.submission3.ui.webview.WebViewActivity
 import com.bintangfajarianto.submission3.utils.Constants
 import com.bumptech.glide.Glide
@@ -29,6 +35,9 @@ class DetailActivity : AppCompatActivity() {
         supportActionBar?.hide()
         val user = intent.getStringExtra(EXTRA_USERNAME) as String
 
+        val factory: ViewModelFactory = ViewModelFactory.getInstance(this)
+        val favViewModel: FavoriteViewModel by viewModels { factory }
+
         // Initialize User Detail Profile
         detailViewModel.findUser(user)
         detailViewModel.user.observe(this) {
@@ -48,13 +57,25 @@ class DetailActivity : AppCompatActivity() {
             startActivity(webviewIntent)
         }
 
+        // Check Favorite
+        binding.toggleButton.isChecked = favViewModel.isUserFavorite(user)
+        binding.toggleButton.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                favViewModel.addToFavorites(detailViewModel.userEntity)
+                Toast.makeText(applicationContext, "Add $user", Toast.LENGTH_SHORT).show()
+            } else {
+                favViewModel.removeFromFavorites(user)
+                Toast.makeText(applicationContext, "Remove $user", Toast.LENGTH_SHORT).show()
+            }
+        }
+
         // Initialize RecyclerView
         detailViewModel.currentTab.observe(this) {
             setRecyclerView(it, user)
         }
 
         // Initialize Fragment
-        val fragmentAdapter = UserConnectionAdapter(this@DetailActivity)
+        val fragmentAdapter = DetailFragmentAdapter(this@DetailActivity)
 
         // Initialize TabLayout and ViewPager
         val tabs: TabLayout = binding.tabs
@@ -86,13 +107,18 @@ class DetailActivity : AppCompatActivity() {
         val decimalFormat = CompactDecimalFormat.getInstance(Locale.US, CompactDecimalFormat.CompactStyle.SHORT)
         decimalFormat.maximumFractionDigits = 1
 
-        val name = if (userDetail?.name.isNullOrEmpty()) Constants.DASH else userDetail?.name
-        val company = if (userDetail?.company.isNullOrEmpty()) Constants.DASH else userDetail?.company
-        val location = if (userDetail?.location.isNullOrEmpty()) Constants.DASH else userDetail?.location
-        val follower = decimalFormat.format(userDetail?.followers) + " followers"
-        val following = decimalFormat.format(userDetail?.following) + " following"
-        val repo = decimalFormat.format(userDetail?.publicRepos) + " repository"
-        val gist = decimalFormat.format(userDetail?.publicGists) + " gist"
+        val name = userDetail?.name ?: Constants.DASH
+        val company = userDetail?.company ?: Constants.DASH
+        val location = userDetail?.location ?: Constants.DASH
+
+        val follower = decimalFormat.format(userDetail?.followers) +
+            Constants.SPACE + resources.getString(R.string.follower)
+        val following = decimalFormat.format(userDetail?.following) +
+            Constants.SPACE + resources.getString(R.string.following)
+        val repo = decimalFormat.format(userDetail?.publicRepos) +
+            Constants.SPACE + resources.getString(R.string.repository)
+        val gist = decimalFormat.format(userDetail?.publicGists) +
+            Constants.SPACE + resources.getString(R.string.gist)
 
         binding.apply {
             detailName.text = name

@@ -28,7 +28,7 @@ class HomeActivity : AppCompatActivity() {
         supportActionBar?.title = "Github"
 
         // Initialize Fragment
-        val fragmentAdapter = HomeAdapter(this@HomeActivity)
+        val fragmentAdapter = HomeFragmentAdapter(this@HomeActivity)
 
         // Initialize TabLayout and ViewPager
         val tabs: TabLayout = binding.tabs

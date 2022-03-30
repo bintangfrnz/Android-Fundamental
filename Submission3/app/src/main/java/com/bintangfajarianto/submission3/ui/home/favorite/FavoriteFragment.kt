@@ -1,25 +1,62 @@
 package com.bintangfajarianto.submission3.ui.home.favorite
 
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bintangfajarianto.submission3.R
+import com.bintangfajarianto.submission3.data.local.entity.UserEntity
+import com.bintangfajarianto.submission3.databinding.FragmentFavoriteBinding
 
 class FavoriteFragment : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private var _binding: FragmentFavoriteBinding? = null
+    private val binding get() = _binding!!
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favorite, container, false)
+        _binding = FragmentFavoriteBinding.inflate(layoutInflater, container, false)
+        return binding.root
     }
 
-    companion object {}
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val factory: ViewModelFactory = ViewModelFactory.getInstance(requireActivity())
+        val favViewModel: FavoriteViewModel by viewModels { factory }
+
+        favViewModel.getFavoriteUsers().observe(viewLifecycleOwner) {
+            val listUser = ArrayList<UserEntity>()
+            for (user in it)
+                listUser.add(user)
+
+            setRecyclerView(listUser)
+        }
+        favViewModel.messageError.observe(viewLifecycleOwner) {
+            binding.errorMessage.text = it
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun setRecyclerView(listUser: ArrayList<UserEntity>) {
+        val rvUsers = binding.rvUsers
+
+        // Add divider between item in recyclerview
+        val div = DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
+        div.setDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.white)))
+        rvUsers.addItemDecoration(div)
+
+        rvUsers.layoutManager = LinearLayoutManager(context)
+        rvUsers.adapter = FavoriteAdapter(listUser)
+    }
 }
