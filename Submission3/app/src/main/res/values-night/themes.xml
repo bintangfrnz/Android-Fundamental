@@ -1,16 +1,106 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Submission2" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.Submission3" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/dark_1</item>
         <item name="colorPrimaryVariant">@color/dark_2</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/blue</item>
-        <item name="colorSecondaryVariant">@color/blue_light</item>
-        <item name="colorOnSecondary">@color/dark_3</item>
+        <item name="colorSecondary">@color/green_dark</item>
+        <item name="colorSecondaryVariant">@color/green</item>
+        <item name="colorOnSecondary">@color/gray</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:windowLightStatusBar">false</item>
         <!-- Customize your theme here. -->
+    </style>
+
+    <!-- Layout -->
+    <style name="DefaultViewGroup">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">?attr/colorPrimaryVariant</item>
+    </style>
+
+    <style name="ColumnContent">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="RowContent">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">?attr/colorPrimary</item>
+    </style>
+
+    <style name="Content">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+    </style>
+    <style name="Content.Button">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/blue_light</item>
+    </style>
+    <style name="Content.Big">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="Content.Medium">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="Content.Small">
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="Content.Small.Limited">
+        <item name="android:maxLines">1</item>
+        <item name="android:maxEms">12</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+    <style name="Content.Small.Gray">
+        <item name="android:textColor">?attr/colorOnSecondary</item>
+    </style>
+    <style name="Content.Mini">
+        <item name="android:textSize">12sp</item>
+    </style>
+    <style name="Content.Mini.Gray">
+        <item name="android:textColor">?attr/colorOnSecondary</item>
+    </style>
+
+
+    <!-- Icon & Image -->
+    <style name="SplashImage">
+        <item name="android:layout_width">160dp</item>
+        <item name="android:layout_height">160dp</item>
+    </style>
+    <style name="SplashImage.Text">
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_marginTop">24dp</item>
+    </style>
+
+    <style name="AppBarImage">
+        <item name="android:layout_width">32dp</item>
+        <item name="android:layout_height">32dp</item>
+    </style>
+
+    <style name="IconProfile">
+        <item name="android:layout_width">20dp</item>
+        <item name="android:layout_height">20dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+    </style>
+    <style name="IconProfile.CardView">
+        <item name="android:layout_marginStart">16dp</item>
+    </style>
+
+    <style name="CircleImage">
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="civ_border_color">?attr/colorOnSecondary</item>
+        <item name="civ_border_width">1dp</item>
+    </style>
+    <style name="CircleImage.Mini">
+        <item name="android:layout_width">60dp</item>
+        <item name="android:layout_height">60dp</item>
     </style>
 </resources>

@@ -14,7 +14,7 @@
     <ImageView
         android:id="@+id/github_logo"
         style="@style/SplashImage"
-        android:src="@drawable/github_white"
+        android:src="@drawable/github"
         android:contentDescription="@string/github"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,7 +23,7 @@
     <ImageView
         android:id="@+id/github_text"
         style="@style/SplashImage.Text"
-        android:src="@drawable/github_text_white"
+        android:src="@drawable/github_text"
         android:contentDescription="@string/github"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

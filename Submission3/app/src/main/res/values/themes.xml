@@ -1,16 +1,17 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Submission2" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.Submission3" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/dark_1</item>
-        <item name="colorPrimaryVariant">@color/dark_2</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimary">@color/gray</item>
+        <item name="colorPrimaryVariant">@color/white</item>
+        <item name="colorOnPrimary">@color/dark_3</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/blue</item>
         <item name="colorSecondaryVariant">@color/blue_light</item>
-        <item name="colorOnSecondary">@color/dark_3</item>
+        <item name="colorOnSecondary">@color/dark_1</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:windowLightStatusBar">true</item>
         <!-- Customize your theme here. -->
     </style>
 
@@ -18,7 +19,7 @@
     <style name="DefaultViewGroup">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:background">@color/dark_2</item>
+        <item name="android:background">?attr/colorPrimaryVariant</item>
     </style>
 
     <style name="ColumnContent">
@@ -29,12 +30,13 @@
     <style name="RowContent">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">?attr/colorPrimary</item>
     </style>
 
     <style name="Content">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
     </style>
     <style name="Content.Button">
         <item name="android:textStyle">bold</item>
@@ -57,13 +59,13 @@
         <item name="android:ellipsize">end</item>
     </style>
     <style name="Content.Small.Gray">
-        <item name="android:textColor">@color/gray</item>
+        <item name="android:textColor">?attr/colorOnSecondary</item>
     </style>
     <style name="Content.Mini">
         <item name="android:textSize">12sp</item>
     </style>
     <style name="Content.Mini.Gray">
-        <item name="android:textColor">@color/gray</item>
+        <item name="android:textColor">?attr/colorOnSecondary</item>
     </style>
 
 
@@ -94,7 +96,7 @@
     <style name="CircleImage">
         <item name="android:layout_width">80dp</item>
         <item name="android:layout_height">80dp</item>
-        <item name="civ_border_color">@color/gray</item>
+        <item name="civ_border_color">?attr/colorOnSecondary</item>
         <item name="civ_border_width">1dp</item>
     </style>
     <style name="CircleImage.Mini">
