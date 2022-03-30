@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/RowContent"
-    android:background="@color/dark_2"
     android:layout_margin="6dp"
     android:padding="8dp">
 

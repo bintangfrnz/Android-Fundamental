@@ -4,25 +4,26 @@ import com.bintangfajarianto.submission3.BuildConfig
 import com.bintangfajarianto.submission3.data.remote.response.SearchUser
 import com.bintangfajarianto.submission3.data.remote.response.User
 import com.bintangfajarianto.submission3.data.remote.response.UserDetail
+import retrofit2.Call
 import retrofit2.http.*
 
 interface ApiService {
 
     @Headers("Authorization: token " + BuildConfig.API_KEY)
     @GET("users/{username}")
-    suspend fun getDetailUser(@Path("username") username: String) : UserDetail
+    fun getDetailUser(@Path("username") username: String) : Call<UserDetail>
 
     @Headers("Authorization: token " + BuildConfig.API_KEY)
     @GET("search/users")
-    suspend fun searchUser(@Query("q") q: String) : SearchUser
+    fun searchUser(@Query("q") q: String) : Call<SearchUser>
 
     @Headers("Authorization: token " + BuildConfig.API_KEY)
     @GET("users/{username}/followers")
-    suspend fun getUserFollower(@Path("username") username: String) : List<User>
+    fun getUserFollower(@Path("username") username: String) : Call<List<User>>
 
     @Headers("Authorization: token " + BuildConfig.API_KEY)
     @GET("users/{username}/following")
-    suspend fun getUserFollowing(@Path("username") username: String) : List<User>
+    fun getUserFollowing(@Path("username") username: String) : Call<List<User>>
 
 
 }

@@ -8,6 +8,47 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         style="@style/DefaultViewGroup" >
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_left"
+            android:orientation="vertical"
+            style="@style/Content"
+            app:layout_constraintGuide_percent="0.04" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_right"
+            android:orientation="vertical"
+            style="@style/Content"
+            app:layout_constraintGuide_percent="0.96" />
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/my_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:titleTextColor="?attr/colorOnPrimary"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
+            style="@style/RowContent"
+            android:background="?attr/colorPrimary"
+            app:tabIndicatorColor="@color/blue"
+            app:tabTextColor="@color/blue"
+            app:tabSelectedTextColor="@color/blue_light"
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
+            app:layout_constraintEnd_toStartOf="@id/guideline_right"
+            app:layout_constraintTop_toBottomOf="@id/my_toolbar" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/view_pager"
+            style="@style/RowContent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tabs" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.core.widget.NestedScrollView>
