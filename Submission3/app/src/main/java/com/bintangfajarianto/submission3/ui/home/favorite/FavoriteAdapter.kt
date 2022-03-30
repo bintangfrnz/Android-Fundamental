@@ -4,8 +4,6 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
-import android.widget.ToggleButton
 import androidx.recyclerview.widget.RecyclerView
 import com.bintangfajarianto.submission3.data.local.entity.UserEntity
 import com.bintangfajarianto.submission3.databinding.CardViewUserBinding
@@ -22,7 +20,6 @@ class FavoriteAdapter (private val listUsers: ArrayList<UserEntity>)
         val userUsername: TextView = binding.userUsername
         val userCompany: TextView = binding.userCompany
         val userLocation: TextView = binding.userLocation
-        val toggleButton: ToggleButton = binding.toggleButton
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) : ListViewHolder{
@@ -42,14 +39,6 @@ class FavoriteAdapter (private val listUsers: ArrayList<UserEntity>)
             userName.text = user.name
             userCompany.text = user.company
             userLocation.text = user.location
-
-            toggleButton.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    Toast.makeText(itemView.context, "Add $user.login", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(itemView.context, "Remove $user.login", Toast.LENGTH_SHORT).show()
-                }
-            }
 
             itemView.setOnClickListener {
                 val userIntent = Intent(itemView.context, DetailActivity::class.java)

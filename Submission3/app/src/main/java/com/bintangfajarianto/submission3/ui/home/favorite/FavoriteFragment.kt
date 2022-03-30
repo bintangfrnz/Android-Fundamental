@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bintangfajarianto.submission3.R
 import com.bintangfajarianto.submission3.data.local.entity.UserEntity
 import com.bintangfajarianto.submission3.databinding.FragmentFavoriteBinding
+import com.bintangfajarianto.submission3.utils.Constants
 
 class FavoriteFragment : Fragment() {
 
@@ -36,10 +37,14 @@ class FavoriteFragment : Fragment() {
             for (user in it)
                 listUser.add(user)
 
+            if (listUser.size == 0) {
+                val errorMsg = "No Favorite"
+                binding.errorMessage.text = errorMsg
+            } else {
+                binding.errorMessage.text = Constants.BLANK
+            }
+
             setRecyclerView(listUser)
-        }
-        favViewModel.messageError.observe(viewLifecycleOwner) {
-            binding.errorMessage.text = it
         }
     }
 

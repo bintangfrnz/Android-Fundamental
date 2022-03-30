@@ -14,7 +14,7 @@ import retrofit2.Response
 
 class SearchViewModel : ViewModel() {
 
-    private val _messageError = MutableLiveData<String>()
+    private val _messageError = MutableLiveData("No Input")
     val messageError: LiveData<String> = _messageError
 
     private val _listUser = MutableLiveData<List<User>>()
@@ -29,7 +29,6 @@ class SearchViewModel : ViewModel() {
         client.enqueue(object: Callback<SearchUser> {
             override fun onResponse(call: Call<SearchUser>, response: Response<SearchUser>) {
                 _isLoading.value = false
-                Log.e("SearchUser", "Error")
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     _listUser.value = responseBody?.users

@@ -65,14 +65,4 @@
         app:layout_constraintBottom_toBottomOf="@+id/ic_location"
         app:layout_constraintStart_toEndOf="@+id/ic_location" />
 
-    <ToggleButton
-        android:id="@+id/toggle_button"
-        style="@style/CircleImage.Tiny"
-        android:background="@drawable/favorite_selector"
-        android:textOff=""
-        android:textOn=""
-        app:layout_constraintTop_toTopOf="@id/user_avatar"
-        app:layout_constraintBottom_toBottomOf="@id/user_avatar"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,22 +11,23 @@ class FavoriteRepository private constructor(
     private val userDao: UserDao
 ) {
     fun getFavoriteUsers(): LiveData<List<UserEntity>> {
-        Log.e("GetFavorite", "Error")
+        Log.i("FavRepository", "Get Favorite")
         return userDao.getFavoriteUsers()
     }
     fun isUserFavorite(username: String): Boolean {
-        Log.e("IsFavorite", "Error")
+        Log.i("FavRepository", "Is $username exist?")
         return userDao.isUserFavorite(username)
     }
     suspend fun addToFavorites(user: UserEntity) {
-        Log.e("AddToFavorite", "Error")
+        Log.i("FavRepository", "Add ${user.username}")
         userDao.addToFavorites(user)
     }
     suspend fun removeFromFavorites(username: String) {
-        Log.e("RemoveFromFavorite", "Error")
+        Log.i("FavRepository", "Remove $username")
         userDao.removeFromFavorites(username)
     }
     suspend fun removeAll() {
+        Log.i("FavRepository", "Remove ALL")
         userDao.removeAll()
     }
 

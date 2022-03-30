@@ -7,10 +7,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.bintangfajarianto.submission3.R
-import com.bintangfajarianto.submission3.data.local.entity.UserEntity
 import com.bintangfajarianto.submission3.data.remote.response.UserDetail
 import com.bintangfajarianto.submission3.databinding.ActivityDetailBinding
 import com.bintangfajarianto.submission3.ui.home.favorite.FavoriteViewModel

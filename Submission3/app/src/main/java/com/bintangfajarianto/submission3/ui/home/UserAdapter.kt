@@ -4,8 +4,6 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
-import android.widget.ToggleButton
 import androidx.recyclerview.widget.RecyclerView
 import com.bintangfajarianto.submission3.data.remote.response.User
 import com.bintangfajarianto.submission3.databinding.CardViewSimpleBinding
@@ -19,7 +17,6 @@ class UserAdapter(private val listUsers: ArrayList<User>)
     class ListViewHolder(binding: CardViewSimpleBinding) : RecyclerView.ViewHolder(binding.root) {
         val userAvatar: CircleImageView = binding.userAvatar
         val userUsername: TextView = binding.userUsername
-        val toggleButton: ToggleButton = binding.toggleButton
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) : ListViewHolder{
@@ -36,14 +33,6 @@ class UserAdapter(private val listUsers: ArrayList<User>)
                 .apply(RequestOptions().override(100,100))
                 .into(userAvatar)
             userUsername.text = user.login
-
-            toggleButton.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    Toast.makeText(itemView.context, "Add ${user.login}", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(itemView.context, "Remove ${user.login}", Toast.LENGTH_SHORT).show()
-                }
-            }
 
             itemView.setOnClickListener {
                 val userIntent = Intent(itemView.context, DetailActivity::class.java)
