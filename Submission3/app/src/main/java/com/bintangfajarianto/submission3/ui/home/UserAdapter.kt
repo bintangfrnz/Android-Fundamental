@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bintangfajarianto.submission3.data.remote.response.User
 import com.bintangfajarianto.submission3.databinding.CardViewSimpleBinding
+import com.bintangfajarianto.submission3.ui.detail.DetailActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import de.hdodenhof.circleimageview.CircleImageView
@@ -33,6 +34,9 @@ class UserAdapter(private val listUsers: ArrayList<User>) : RecyclerView.Adapter
             userUsername.text = user.login
 
             itemView.setOnClickListener {
+                val userIntent = Intent(itemView.context, DetailActivity::class.java)
+                userIntent.putExtra(DetailActivity.EXTRA_USERNAME, user.login)
+                itemView.context.startActivity(userIntent)
             }
         }
     }

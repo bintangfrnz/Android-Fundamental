@@ -12,6 +12,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Submission3">
         <activity
+            android:name=".ui.detail.DetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.webview.WebViewActivity"
+            android:parentActivityName=".ui.webview.WebViewActivity"
+            android:exported="false" />
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".ui.detail.DetailActivity" />
+        <activity
             android:name=".ui.setting.SettingActivity"
             android:exported="false" />
         <activity

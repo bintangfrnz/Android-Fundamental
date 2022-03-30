@@ -67,9 +67,6 @@ class HomeActivity : AppCompatActivity() {
     }
 
     companion object {
-        private val TAB_TITLES = arrayOf(
-            "Search",
-            "Favorite"
-        )
+        private val TAB_TITLES = arrayOf("Search", "Favorite")
     }
 }
