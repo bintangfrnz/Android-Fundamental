@@ -4,10 +4,8 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.bintangfajarianto.submission3.data.local.entity.UserEntity
 import com.bintangfajarianto.submission3.data.local.room.UserDao
-import com.bintangfajarianto.submission3.data.remote.api.ApiService
 
 class FavoriteRepository private constructor(
-    private val apiService: ApiService,
     private val userDao: UserDao
 ) {
     fun getFavoriteUsers(): LiveData<List<UserEntity>> {
@@ -35,11 +33,10 @@ class FavoriteRepository private constructor(
         @Volatile
         private var instance: FavoriteRepository? = null
         fun getInstance(
-            apiService: ApiService,
             userDao: UserDao
         ): FavoriteRepository =
             instance ?: synchronized(this) {
-                instance ?: FavoriteRepository(apiService, userDao)
+                instance ?: FavoriteRepository(userDao)
             }.also { instance = it }
     }
 }
